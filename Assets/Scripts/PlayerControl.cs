@@ -18,8 +18,8 @@ public class PlayerControl : MonoBehaviour
     public AudioSource boom; 	
 
     public GameObject pewPrefab;
-
     public GameObject boomPrefab;
+    public GameObject[]  pews;
 
     private float hits = 1;
 
@@ -30,6 +30,8 @@ public class PlayerControl : MonoBehaviour
     private float minZ = -5f;
 
     private float maxZ = 11f;
+
+    private int power = 1;
 
     bool gameOver = false;
 
@@ -42,6 +44,7 @@ public class PlayerControl : MonoBehaviour
     void Start()
     {
         gameOver = false;
+        power = 1;
         playerRb = GetComponent<Rigidbody>();
     }
 
@@ -88,28 +91,57 @@ public class PlayerControl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             shoot.Play();
+            fire();
+        }
+    }
+    private void fire(){
+        switch(power){
+            case 1:
+            spawnShot(pews[0],0,0);
+            break;
+            case 2:
+            spawnShot(pews[1],0,0);
+            break;
+            case 3:
+            spawnShot(pews[1],-0.75f,0.0f);
+            spawnShot(pews[1],+0.75f,0.0f);
+            break;
+            case 4:
+            spawnShot(pews[1],-0.0f,0.5f);
+            spawnShot(pews[1],-1.25f,0.0f);
+            spawnShot(pews[1],1.25f,0.0f);
+            break;
+            case 5:
+            spawnShot(pews[1],-1.50f,0.0f);
+            spawnShot(pews[1],+0.75f,0.0f);
+            spawnShot(pews[1],-0.75f,0.0f);
+            spawnShot(pews[1],+1.50f,0.0f);
+            break;
+            default:
+            spawnShot(pews[1],-2.00f,0.0f);
+            spawnShot(pews[1],-1.25f,0.0f);
+            spawnShot(pews[1],-0.0f,0.5f);
+            spawnShot(pews[1], 1.25f,0.0f);
+            spawnShot(pews[1], 2.00f,0.0f);
+            break;
+        }
+
+    }
+    private void spawnShot(GameObject pewPrefab, float dx, float dy){
             Instantiate(pewPrefab,
-            new Vector3(gameObject.transform.position.x,
-                gameObject.transform.position.y,
+            new Vector3(gameObject.transform.position.x + dx,
+                gameObject.transform.position.y + dy,
                 gameObject.transform.position.z + 2),
             //pewPrefab.transform.rotation
             Quaternion.Euler(0, 0, 180));
-
-            // GameObject g = Instantiate(
-            //     boomPrefab,
-            //     new Vector3(0.6f, -2.3f, -0.34f),
-            //     //pewPrefab.transform.rotation
-            //     Quaternion.identity
-            // );
-            // UnityEngine.Object.Destroy(g, 2.0f);
-        }
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
         MoveForward m = other.gameObject.GetComponent<MoveForward>();
         if (m == null) return;
-        Destroy(gameObject);
+        // kill me now Destroy(gameObject);
         switch (m.unitType)
         {
             case MoveForward.UnitType.Ufo1:
@@ -138,6 +170,7 @@ public class PlayerControl : MonoBehaviour
             case MoveForward.UnitType.Powerup2:
                 Debug.Log("Hit Powerup 2");
                 Destroy(m.gameObject);
+                power++;
                 addHits(m.hits);
                 break;
             case MoveForward.UnitType.Pew1:
