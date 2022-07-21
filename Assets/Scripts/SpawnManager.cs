@@ -18,7 +18,7 @@ public class SpawnManager : MonoBehaviour
     void Start()
     {
         countdown = ticksTilSpawn;
-//        spawnHero();
+        spawnHero();
         InvokeRepeating("SpawnGameObject",startDelay, repeatRate);
     }
 
@@ -40,8 +40,8 @@ public class SpawnManager : MonoBehaviour
         } else {
             spawnGoodGuy();
         }
-        if((++ct % 10) == 0){
-            Debug.Log("New Hero");
+        if((++ct % 50) == 0){
+            //Debug.Log("New Hero");
  //           spawnHero();
             if(ticksTilSpawn > 1){
                 ticksTilSpawn--;
