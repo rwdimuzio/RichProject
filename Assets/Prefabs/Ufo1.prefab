@@ -137,7 +137,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitType: 0
-  hits: 1
+  points: 1000
+  hits: 2
   speed: 5
 --- !u!1001 &4550341913929364012
 PrefabInstance:
