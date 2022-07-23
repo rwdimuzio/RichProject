@@ -124,7 +124,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitType: 2
-  hits: 3
+  points: 3000
+  hits: 8
   speed: 9
 --- !u!65 &4101857790561600339
 BoxCollider:

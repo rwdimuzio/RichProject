@@ -6,6 +6,7 @@ public class SpawnManager : MonoBehaviour
 {
     public float startDelay=1f;
     public float repeatRate=1f;
+    private int ticksTilSpawn=10;
     float startZ=20;
     float minX=-19;
     float maxX=20;
@@ -16,6 +17,8 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        countdown = ticksTilSpawn;
+        spawnHero();
         InvokeRepeating("SpawnGameObject",startDelay, repeatRate);
     }
 
@@ -25,16 +28,28 @@ public class SpawnManager : MonoBehaviour
         
     }
 
+    int ct=0;
+    int countdown=0;
     private void SpawnGameObject(){
+        countdown--;
+        if(countdown > 0 ) return;
+        countdown = ticksTilSpawn; 
         float x = Random.value;
         if(x>goodToBadRatio){
-            spwanBadGuy();
+            spawnBadGuy();
         } else {
-            spwanGoodGuy();
+            spawnGoodGuy();
+        }
+        if((++ct % 50) == 0){
+            //Debug.Log("New Hero");
+ //           spawnHero();
+            if(ticksTilSpawn > 1){
+                ticksTilSpawn--;
+            }
         }
 
     }
-    void spwanBadGuy(){
+    void spawnBadGuy(){
             //Debug.Log("New Bad guy");
             int animalIdx = Random.Range(0,badGuys.Length-1);
             Vector3 pos = new Vector3(
@@ -50,9 +65,9 @@ public class SpawnManager : MonoBehaviour
 
 
     }
-    void spwanGoodGuy(){
+    void spawnGoodGuy(){
             //Debug.Log("New Good guy");
-            int animalIdx = Random.Range(0,goodGuys.Length);
+            int animalIdx = Random.Range(1,goodGuys.Length);
             Vector3 pos = new Vector3(
                 Random.Range(minX,maxX),
                 1,
@@ -68,4 +83,17 @@ public class SpawnManager : MonoBehaviour
     public GameObject getExplosion(){
         return  explosions[0];
     } 
+    public void spawnHero(){
+            Vector3 pos = new Vector3(
+                0.06f,
+                1,
+                -4.35f
+            );
+            Instantiate(
+                goodGuys[0],
+                pos,
+                goodGuys[0].transform.rotation
+            );
+
+    }
 }

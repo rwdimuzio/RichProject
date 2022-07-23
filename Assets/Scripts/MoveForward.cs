@@ -20,6 +20,7 @@ public class MoveForward : MonoBehaviour
 
     public UnitType unitType=UnitType.Ufo1;
 
+    public int points = 100;
     public float hits=1;
     public float speed=1;
     private float lowerZ=-10;
@@ -43,6 +44,7 @@ public class MoveForward : MonoBehaviour
         Debug.Log("triggered "+gameObject.tag+" was hit by "+other.gameObject.tag);
         if(gameObject.CompareTag("Pew")){
             if(other.gameObject.CompareTag("Ufo")){
+                GameDirector.Instance.addPoints(points);
                 spawnExplosion(other.gameObject);
                 UnityEngine.Object.Destroy(other.gameObject,0.10f);
                 Destroy(gameObject);
