@@ -78,8 +78,9 @@ public class GameDirector : MonoBehaviour
     }
 
 
-    public void startGame()
+    public void StartGame()
     {
+        Debug.Log("GameDirector.StartGame()");
         state = PlayState.PLAYING;
         lives = NUM_LIVES; // how many respawns left
         fuel = FUEL; // how many shots are left
