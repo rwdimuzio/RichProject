@@ -266,6 +266,7 @@ return the cost of doing business.
     {
         Debug.Log("Game Over!");
         gameOver = true;
+        GameDirector.Instance.EndGame();
     }
 
     private void spawnExplosion(GameObject src)
