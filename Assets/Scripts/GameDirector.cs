@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class GameDirector : MonoBehaviour
 {
+    public GameObject gameOverObject;
     public GameObject scoreObject;
     public GameObject livesObject;
 
@@ -17,7 +18,7 @@ public class GameDirector : MonoBehaviour
 
     public AudioSource boomSound;
 
-    private const int NUM_LIVES = 10;
+    private const int NUM_LIVES = 3;
 
     private const int FUEL = 100;
 
@@ -46,6 +47,7 @@ public class GameDirector : MonoBehaviour
     // Because of using RuntimeInitializeOnLoadMethod attribute to find/create and
     // initialize the instance, this property is accessible and
     // usable even in Awake() methods.
+    private SpawnManager spawnManager;
     public static GameDirector Instance { get; private set; }
 
     // Thanks to the attribute, this method is executed before any other MonoBehaviour
@@ -75,11 +77,13 @@ public class GameDirector : MonoBehaviour
         livesKeeper = livesObject.GetComponent<LivesKeeper>();
         scoreKeeper.setScore(score);
         livesKeeper.setLives(lives);
+        spawnManager = gameObject.GetComponent<SpawnManager>(); // sibling
     }
 
 
-    public void startGame()
+    public void StartGame()
     {
+        Debug.Log("GameDirector.StartGame()");
         state = PlayState.PLAYING;
         lives = NUM_LIVES; // how many respawns left
         fuel = FUEL; // how many shots are left
@@ -88,6 +92,13 @@ public class GameDirector : MonoBehaviour
 
         scoreKeeper.setScore(score);
         livesKeeper.setLives(lives);
+        gameOverObject.active = false;
+        spawnManager.startSpawning();
+        doSpawnHero(0.0f);
+    }
+    public void EndGame(){
+        gameOverObject.active = true;
+        spawnManager.stopSpawning();
     }
 
     public bool shoot(int unitsPerShot)

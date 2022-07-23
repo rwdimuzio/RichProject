@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    const int SLOWEST_SPAWN_RATE = 10;
+    const int FASTEST_SPAWN_RATE = 0;
+    bool spawning = false;
     public float startDelay=1f;
     public float repeatRate=1f;
     private int ticksTilSpawn=10;
@@ -18,8 +21,15 @@ public class SpawnManager : MonoBehaviour
     void Start()
     {
         countdown = ticksTilSpawn;
-        spawnHero();
+        //spawnHero();
         InvokeRepeating("SpawnGameObject",startDelay, repeatRate);
+    }
+    public void startSpawning(){
+        ticksTilSpawn = SLOWEST_SPAWN_RATE;
+        spawning = true;
+    }
+    public void stopSpawning(){
+        spawning = false;
     }
 
     // Update is called once per frame
@@ -31,6 +41,7 @@ public class SpawnManager : MonoBehaviour
     int ct=0;
     int countdown=0;
     private void SpawnGameObject(){
+        if(!spawning) return;
         countdown--;
         if(countdown > 0 ) return;
         countdown = ticksTilSpawn; 
@@ -40,7 +51,7 @@ public class SpawnManager : MonoBehaviour
         } else {
             spawnGoodGuy();
         }
-        if((++ct % 50) == 0){
+        if((++ct % 25) == 0){
             //Debug.Log("New Hero");
  //           spawnHero();
             if(ticksTilSpawn > 1){
