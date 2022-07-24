@@ -7,12 +7,14 @@ public class SpawnManager : MonoBehaviour
     const int SLOWEST_SPAWN_RATE = 10;
     const int FASTEST_SPAWN_RATE = 0;
     bool spawning = false;
+    bool okSpawnMana = false;
     public float startDelay=1f;
     public float repeatRate=1f;
     private int ticksTilSpawn=10;
     float startZ=20;
     float minX=-19;
     float maxX=20;
+    public GameObject  heroObject;
     public GameObject[]  goodGuys;
     public GameObject[] badGuys;
     public GameObject[] explosions;
@@ -45,11 +47,13 @@ public class SpawnManager : MonoBehaviour
         countdown--;
         if(countdown > 0 ) return;
         countdown = ticksTilSpawn; 
+
         float x = Random.value;
-        if(x>goodToBadRatio){
+        if(x>goodToBadRatio || ! okSpawnMana){
             spawnBadGuy();
         } else {
-            spawnGoodGuy();
+            spawnMana();
+            okSpawnMana = false;
         }
         if((++ct % 25) == 0){
             //Debug.Log("New Hero");
@@ -76,7 +80,11 @@ public class SpawnManager : MonoBehaviour
 
 
     }
-    void spawnGoodGuy(){
+    public void makeMana(){
+        okSpawnMana = true;
+    }
+
+    void spawnMana(){
             //Debug.Log("New Good guy");
             int animalIdx = Random.Range(1,goodGuys.Length);
             Vector3 pos = new Vector3(
@@ -94,17 +102,4 @@ public class SpawnManager : MonoBehaviour
     public GameObject getExplosion(){
         return  explosions[0];
     } 
-    public void spawnHero(){
-            Vector3 pos = new Vector3(
-                0.06f,
-                1,
-                -4.35f
-            );
-            Instantiate(
-                goodGuys[0],
-                pos,
-                goodGuys[0].transform.rotation
-            );
-
-    }
 }

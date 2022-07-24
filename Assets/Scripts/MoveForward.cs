@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class MoveForward : MonoBehaviour
 {
-    SpawnManager gameControl;
     public enum UnitType
     {
         Ufo1,
@@ -28,7 +27,6 @@ public class MoveForward : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameControl = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
     }
 
     // Update is called once per frame
@@ -59,7 +57,7 @@ public class MoveForward : MonoBehaviour
                 );
                 // TODO add score
                 GameObject g = Instantiate(
-                    gameControl.getExplosion(),
+                    GameDirector.Instance.getExplosion(),
                     pos,
                     Quaternion.identity
                 );
