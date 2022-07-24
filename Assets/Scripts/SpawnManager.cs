@@ -95,17 +95,4 @@ public class SpawnManager : MonoBehaviour
     public GameObject getExplosion(){
         return  explosions[0];
     } 
-    public void xspawnHero(){
-            Vector3 pos = new Vector3(
-                0.06f,
-                1,
-                -4.35f
-            );
-            Instantiate(
-                heroObject,
-                pos,
-                heroObject.transform.rotation
-            );
-
-    }
 }

@@ -15,10 +15,6 @@ using UnityEngine;
 //using MoveForward.UnitType;
 public class PlayerControl : MonoBehaviour
 {
-    public AudioSource shoot;
-
-    public AudioSource boom;
-
     public GameObject pewPrefab;
 
     public GameObject boomPrefab;
@@ -98,7 +94,6 @@ public class PlayerControl : MonoBehaviour
         {
             GameDirector.Instance.playShootSound();
 
-            //shoot.Play();
             int cost = fire();
             GameDirector.Instance.addFuel(-1 * cost);
         }
@@ -113,7 +108,7 @@ return the cost of doing business.
         switch (power)
         {
             case 1:
-                spawnShot(pews[0], 0, 0);
+                spawnShot(pews[0], 0.55f, 0);
                 return 1;
                 break;
             case 2:
@@ -277,7 +272,7 @@ return the cost of doing business.
                 src.transform.position.z);
 
         // TODO add score
-        GameObject g = Instantiate(boomPrefab, pos, Quaternion.identity);
+        GameObject g = Instantiate(GameDirector.Instance.getExplosion(), pos, Quaternion.identity);
         MoveForward base_c = src.gameObject.GetComponent<MoveForward>();
         MoveForward g_c = g.GetComponent<MoveForward>();
         g_c.speed = -1 * base_c.speed; // they are coming at us, so flip the speed
@@ -292,7 +287,7 @@ return the cost of doing business.
                 src.transform.position.z);
 
         // TODO add score
-        GameObject g = Instantiate(boomPrefab, pos, Quaternion.identity);
+        GameObject g = Instantiate(GameDirector.Instance.getExplosion(), pos, Quaternion.identity);
         UnityEngine.Object.Destroy(g, 1.5f);
     }
 
