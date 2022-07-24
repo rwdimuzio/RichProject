@@ -13,6 +13,7 @@ public class SpawnManager : MonoBehaviour
     float startZ=20;
     float minX=-19;
     float maxX=20;
+    public GameObject  heroObject;
     public GameObject[]  goodGuys;
     public GameObject[] badGuys;
     public GameObject[] explosions;
@@ -94,16 +95,16 @@ public class SpawnManager : MonoBehaviour
     public GameObject getExplosion(){
         return  explosions[0];
     } 
-    public void spawnHero(){
+    public void xspawnHero(){
             Vector3 pos = new Vector3(
                 0.06f,
                 1,
                 -4.35f
             );
             Instantiate(
-                goodGuys[0],
+                heroObject,
                 pos,
-                goodGuys[0].transform.rotation
+                heroObject.transform.rotation
             );
 
     }

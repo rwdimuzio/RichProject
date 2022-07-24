@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Reflection;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,7 @@ public class GameDirector : MonoBehaviour
     public GameObject livesObject;
 
     public GameObject playerPrefab;
+    public GameObject explosionObject;
 
     public AudioSource shootSound;
 
@@ -119,6 +121,9 @@ public class GameDirector : MonoBehaviour
             strength = 0;
         }
         return strength > 0;
+    }
+    public GameObject getExplosion(){
+        return explosionObject;
     }
 
     public void doSpawnHero(float time)

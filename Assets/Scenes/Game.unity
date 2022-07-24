@@ -722,6 +722,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startDelay: 1
   repeatRate: 0.1
+  heroObject: {fileID: 0}
   goodGuys:
   - {fileID: 3105522441029508942, guid: 69131aad48c1b804f9755dd2f7435971, type: 3}
   - {fileID: 1547053689048360479, guid: 1e0d64a46b599774dba13a9910571f9d, type: 3}
@@ -763,6 +764,8 @@ MonoBehaviour:
   scoreObject: {fileID: 1923792352}
   livesObject: {fileID: 1902657356}
   playerPrefab: {fileID: 3105522441029508942, guid: 69131aad48c1b804f9755dd2f7435971,
+    type: 3}
+  explosionObject: {fileID: 2970841661863491704, guid: 8e51fbf6c163e7e498a3f68dd4e2caca,
     type: 3}
   shootSound: {fileID: 630119045}
   boomSound: {fileID: 1796105380}
