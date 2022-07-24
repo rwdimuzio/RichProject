@@ -17,8 +17,8 @@ public class GameDirector : MonoBehaviour
     public GameObject explosionObject;
 
     public AudioSource shootSound;
-
     public AudioSource boomSound;
+    public AudioSource levelUpSound;
 
     private const int NUM_LIVES = 3;
 
@@ -157,11 +157,23 @@ public class GameDirector : MonoBehaviour
         boomSound.Play();
     }
 
+    public void playLevelUpSound()
+    {
+        levelUpSound.Play();
+    }
+
     public void addPoints(int amt)
     {
+        int prevScore = score;
         score += amt;
+        int prevHundredK = (int)(prevScore / 100000f);
+        int hundredK = (int)(score / 100000f)   ;
         Debug.Log("addPoints score:  " + score);
         scoreKeeper.setScore (score);
+        if(prevScore < 10000 && score >= 10000  || prevHundredK != hundredK){
+            addLives(1);
+            playLevelUpSound();
+        }
     }
 
     public bool  addLives(int amt)

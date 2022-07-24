@@ -15,10 +15,6 @@ using UnityEngine;
 //using MoveForward.UnitType;
 public class PlayerControl : MonoBehaviour
 {
-    public GameObject pewPrefab;
-
-    public GameObject boomPrefab;
-
     public GameObject[] pews;
 
     public GameObject playerPrefab;
