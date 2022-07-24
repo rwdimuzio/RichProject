@@ -7,6 +7,7 @@ public class SpawnManager : MonoBehaviour
     const int SLOWEST_SPAWN_RATE = 10;
     const int FASTEST_SPAWN_RATE = 0;
     bool spawning = false;
+    bool okSpawnMana = false;
     public float startDelay=1f;
     public float repeatRate=1f;
     private int ticksTilSpawn=10;
@@ -46,11 +47,13 @@ public class SpawnManager : MonoBehaviour
         countdown--;
         if(countdown > 0 ) return;
         countdown = ticksTilSpawn; 
+
         float x = Random.value;
-        if(x>goodToBadRatio){
+        if(x>goodToBadRatio || ! okSpawnMana){
             spawnBadGuy();
         } else {
-            spawnGoodGuy();
+            spawnMana();
+            okSpawnMana = false;
         }
         if((++ct % 25) == 0){
             //Debug.Log("New Hero");
@@ -77,7 +80,11 @@ public class SpawnManager : MonoBehaviour
 
 
     }
-    void spawnGoodGuy(){
+    public void makeMana(){
+        okSpawnMana = true;
+    }
+
+    void spawnMana(){
             //Debug.Log("New Good guy");
             int animalIdx = Random.Range(1,goodGuys.Length);
             Vector3 pos = new Vector3(

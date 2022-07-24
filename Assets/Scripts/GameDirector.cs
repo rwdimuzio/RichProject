@@ -133,6 +133,7 @@ public class GameDirector : MonoBehaviour
 
     public IEnumerator spawnHero(float respawnTime, GameObject playerPrefab)
     {
+        addPointCounter = 0;
         Debug.Log("The wait begins waiting " + respawnTime);
         yield return new WaitForSeconds(respawnTime);
         Debug.Log("The wait is over!");
@@ -162,18 +163,36 @@ public class GameDirector : MonoBehaviour
         levelUpSound.Play();
     }
 
+
+int addPointCounter = 0;
     public void addPoints(int amt)
     {
+        addToPointCounter();
         int prevScore = score;
         score += amt;
-        int prevHundredK = (int)(prevScore / 100000f);
-        int hundredK = (int)(score / 100000f)   ;
         Debug.Log("addPoints score:  " + score);
         scoreKeeper.setScore (score);
-        if(prevScore < 10000 && score >= 10000  || prevHundredK != hundredK){
+        if(prevScore < 10000 && score >= 10000  || pointsCrossBoundary(prevScore, score, 100000) ){
             addLives(1);
             playLevelUpSound();
         }
+    }
+
+    private void addToPointCounter(){
+        int prev = addPointCounter;
+        addPointCounter++;
+        bool crossed = pointsCrossBoundary(prev,addPointCounter, 100);
+
+        if(prev < 25 && addPointCounter >= 25 || crossed){
+            spawnManager.makeMana();
+        }
+        
+    }
+
+    private bool pointsCrossBoundary(float prevf, float nextf, float threshold){
+        int prev = (int)(prevf/threshold);
+        int next = (int)(nextf/threshold);
+        return prev != next;
     }
 
     public bool  addLives(int amt)
