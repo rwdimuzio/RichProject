@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4304295643064831119}
   - component: {fileID: 4304295643064831116}
-  - component: {fileID: 4304295643064831117}
   - component: {fileID: 4304295643064831114}
+  - component: {fileID: 114265872614977802}
   m_Layer: 0
   m_Name: Pew2
   m_TagString: Pew
@@ -52,21 +52,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 36
   m_CollisionDetection: 0
---- !u!114 &4304295643064831117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4304295643064831118}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2744f0f95c66174b9752087209227a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitType: 4
-  hits: 3
-  speed: 30
 --- !u!65 &4304295643064831114
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -80,6 +65,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.3, z: 0.8754926}
   m_Center: {x: 0, y: 0.02, z: -0.03}
+--- !u!114 &114265872614977802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4304295643064831118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fb342df349ba7845ae86aecd3d5f5cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitType: 4
+  points: 100
+  hits: 3
+  speed: 40
 --- !u!1 &4304295643183622890
 GameObject:
   m_ObjectHideFlags: 0

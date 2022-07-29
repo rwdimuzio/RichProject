@@ -19,17 +19,19 @@ public class SpawnManager : MonoBehaviour
     public GameObject[] badGuys;
     public GameObject[] explosions;
     public float goodToBadRatio=0.1f;
-    // Start is called before the first frame update
+
     void Start()
     {
         countdown = ticksTilSpawn;
         //spawnHero();
         InvokeRepeating("SpawnGameObject",startDelay, repeatRate);
     }
+
     public void startSpawning(){
         ticksTilSpawn = SLOWEST_SPAWN_RATE;
         spawning = true;
     }
+
     public void stopSpawning(){
         spawning = false;
     }
@@ -49,7 +51,7 @@ public class SpawnManager : MonoBehaviour
         countdown = ticksTilSpawn; 
 
         float x = Random.value;
-        if(x>goodToBadRatio || ! okSpawnMana){
+        if(x>goodToBadRatio || ! okSpawnMana ){
             spawnBadGuy();
         } else {
             spawnMana();
@@ -66,7 +68,7 @@ public class SpawnManager : MonoBehaviour
     }
     void spawnBadGuy(){
             //Debug.Log("New Bad guy");
-            int animalIdx = Random.Range(0,badGuys.Length-1);
+            int animalIdx = Random.Range(0,badGuys.Length);
             Vector3 pos = new Vector3(
                 Random.Range(minX,maxX),
                 1,

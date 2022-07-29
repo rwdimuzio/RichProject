@@ -13,13 +13,11 @@ using System.Xml.Schema;
 using UnityEngine;
 
 //using MoveForward.UnitType;
-public class PlayerControl : MonoBehaviour
+public class PlayerControl : PlayerBase
 {
     public GameObject[] pews;
 
     public GameObject playerPrefab;
-
-    private float hits = 1;
 
     private float minX = -22.5f;
 
@@ -28,10 +26,7 @@ public class PlayerControl : MonoBehaviour
     private float minZ = -5f;
 
     private float maxZ = 11f;
-
     private int power = 1;
-
-    bool gameOver = false;
 
     Rigidbody playerRb;
 
@@ -41,8 +36,6 @@ public class PlayerControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameOver = false;
-        power = 1;
         playerRb = GetComponent<Rigidbody>();
     }
 
@@ -104,50 +97,69 @@ return the cost of doing business.
         switch (power)
         {
             case 1:
-                spawnShot(pews[0], 0.55f, 0);
+                spawnShot(pews[0], 0.55f, 0.0f);
                 return 1;
                 break;
             case 2:
-                spawnShot(pews[1], 0, 0);
+                spawnShot(pews[0], 0.30f, 0.0f);
+                spawnShot(pews[0], 0.80f, 0.0f);
                 return 2;
                 break;
             case 3:
+                spawnShot(pews[1], 0f, 0.0f);
+                return 3;
+                break;
+            case 4:
                 spawnShot(pews[1], -0.75f, 0.0f);
                 spawnShot(pews[1], +0.75f, 0.0f);
                 return 4;
                 break;
-            case 4:
-                spawnShot(pews[1], -0.0f, 0.5f);
-                spawnShot(pews[1], -1.25f, 0.0f);
-                spawnShot(pews[1], 1.25f, 0.0f);
+            case 5:
+                spawnShot(pews[1], -1.25f, 0.5f);
+                spawnShot(pews[1], 0f, 1.0f);
+                spawnShot(pews[1], 1.25f, 0.5f);
                 return 8;
                 break;
-            case 5:
-                spawnShot(pews[1], -1.50f, 0.0f);
+            case 6:
+                spawnShot(pews[1], -2.00f, 0.0f);
                 spawnShot(pews[1], +0.75f, 0.0f);
+                spawnShot(pews[1], 0f, 1.0f);
                 spawnShot(pews[1], -0.75f, 0.0f);
-                spawnShot(pews[1], +1.50f, 0.0f);
+                spawnShot(pews[1], +2.00f, 0.0f);
                 return 12;
                 break;
-            default:
-                spawnShot(pews[1], -2.00f, 0.0f);
+            case 7:
+                spawnShot(pews[1], -2.50f, 0.0f,-5);
                 spawnShot(pews[1], -1.25f, 0.0f);
-                spawnShot(pews[1], -0.0f, 0.5f);
+                spawnShot(pews[1], -0.0f, 2.0f);
                 spawnShot(pews[1], 1.25f, 0.0f);
-                spawnShot(pews[1], 2.00f, 0.0f);
+                spawnShot(pews[1], 2.50f, 0.0f,5);
+                return 16;
+            default:
+                spawnShot(pews[1], -3.5f, 0.0f,-45);
+                spawnShot(pews[1], -2.50f, 1.0f,-30);
+                spawnShot(pews[1], -1.25f, 0.0f);
+                spawnShot(pews[1], -0.0f, 2.0f);
+                spawnShot(pews[1], 1.25f, 0.0f);
+                spawnShot(pews[1], 2.50f, 1.0f,30);
+                spawnShot(pews[1], 3.5f, 0.0f,45);
                 return 16;
                 break;
         }
     }
 
-    private void spawnShot(GameObject pewPrefab, float dx, float dy)
+    private void spawnShot(GameObject pewPrefab, float dx, float dy, int skew=0)
     {
         Instantiate(pewPrefab,
-        new Vector3(gameObject.transform.position.x + dx,
-            gameObject.transform.position.y + dy,
-            gameObject.transform.position.z + 2),
-        //pewPrefab.transform.rotation
-        Quaternion.Euler(0, 0, 180));
+            new Vector3(
+                gameObject.transform.position.x + dx,
+                gameObject.transform.position.y,
+                gameObject.transform.position.z + 1.5f + dy
+            ),
+            //pewPrefab.transform.rotation
+            Quaternion.Euler(0, skew, 180) 
+
+        );
     }
 
     private void OnTriggerEnter(Collider other)
@@ -158,41 +170,41 @@ return the cost of doing business.
         // kill me now Destroy(gameObject);
         switch (m.unitType)
         {
-            case MoveForward.UnitType.Ufo1:
+            case MoveForward.UnitType.EasyUfo:
+
                 Debug.Log("Hit Ufo1");
                 spawnExplosion(m.gameObject);
                 Destroy(m.gameObject);
-                addHits(-m.hits);
+                addHits(m.hits);
                 break;
-            case MoveForward.UnitType.Ufo2:
+            case MoveForward.UnitType.MediumUfo:
                 Debug.Log("Hit Ufo2");
                 spawnExplosion(m.gameObject);
                 Destroy(m.gameObject);
-                addHits(-m.hits);
+                addHits(m.hits);
                 break;
-            case MoveForward.UnitType.Ufo3:
+            case MoveForward.UnitType.HardUfo:
                 Debug.Log("Hit Ufo3");
                 spawnExplosion(m.gameObject);
                 Destroy(m.gameObject);
-                addHits(-m.hits);
-                break;
-            case MoveForward.UnitType.Powerup1:
-                Debug.Log("Hit Powerup1");
-                Destroy(m.gameObject);
                 addHits(m.hits);
                 break;
-            case MoveForward.UnitType.Powerup2:
+            case MoveForward.UnitType.PowerupGun:
+                Debug.Log("Hit Powerup1");
+                Destroy(m.gameObject);
+                power++;
+                break;
+            case MoveForward.UnitType.PowerupLife:
                 Debug.Log("Hit Powerup 2");
                 Destroy(m.gameObject);
                 power++;
-                addHits(m.hits);
                 break;
-            case MoveForward.UnitType.Pew1:
+            case MoveForward.UnitType.LowPowerShot:
                 Debug.Log("Hit Pew1");
                 Destroy(m.gameObject);
                 addHits(m.hits);
                 break;
-            case MoveForward.UnitType.Pew2:
+            case MoveForward.UnitType.HighPowerShot:
                 Debug.Log("Hit Pew2");
                 Destroy(m.gameObject);
                 addHits(m.hits);
@@ -229,12 +241,7 @@ return the cost of doing business.
 
     void addHits(float num)
     {
-        float h = hits + num;
-        if (h > 10) h = 10;
-        if (h < 0) h = 0;
-        hits = h;
-        Debug.Log("Hits -> " + hits);
-        if (hits <= 0)
+        if (takeHit((int)num))
         {
             GameDirector.Instance.playBoomSound();
             OnHeroDied();
@@ -256,7 +263,6 @@ return the cost of doing business.
     void OnGameOver()
     {
         Debug.Log("Game Over!");
-        gameOver = true;
         GameDirector.Instance.EndGame();
     }
 
@@ -267,7 +273,6 @@ return the cost of doing business.
                 src.transform.position.y,
                 src.transform.position.z);
 
-        // TODO add score
         GameObject g = Instantiate(GameDirector.Instance.getExplosion(), pos, Quaternion.identity);
         MoveForward base_c = src.gameObject.GetComponent<MoveForward>();
         MoveForward g_c = g.GetComponent<MoveForward>();
@@ -282,7 +287,6 @@ return the cost of doing business.
                 src.transform.position.y,
                 src.transform.position.z);
 
-        // TODO add score
         GameObject g = Instantiate(GameDirector.Instance.getExplosion(), pos, Quaternion.identity);
         UnityEngine.Object.Destroy(g, 1.5f);
     }
