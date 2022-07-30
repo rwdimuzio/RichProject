@@ -177,13 +177,13 @@ public class GameDirector : MonoBehaviour
     public void addPoints(int amt)
     {
         bumpStrikeCounter();
-        int prevScore = score;
+        int prev = score;
         score += amt;
         Debug.Log("addPoints score:  " + score);
         scoreKeeper.setScore (score);
-        if (
-            prevScore < 10000 && score >= 10000 ||
-            pointsCrossBoundary(prevScore, score, 100000)
+        if ( 
+            (prev < 10000 && crossBoundary(prev/10000, score/10000)) || // first 10,000 points first free li
+            (prev >=10000 && crossBoundary(prev/50000, score/50000))  // and at every 50,0000 after that 
         )
         {
             addLives(1);
@@ -193,30 +193,23 @@ public class GameDirector : MonoBehaviour
 
 /**
 control how often they get power ups
-
 */
     private void bumpStrikeCounter()
     {
         int prev = strikeCounter;
         strikeCounter++;
-        bool higherThreshold = pointsCrossBoundary(prev, strikeCounter, 125);
-        bool beginnerThreshold  =  pointsCrossBoundary(prev, strikeCounter, 25);
-        if ( beginnerThreshold || higherThreshold)
-        {
-            spawnManager.makeMana();
-            if(strikeCounter > 125){
-                strikeCounter -=100; 
-            }
+        if ( 
+            (prev < 25 && crossBoundary(prev/25, strikeCounter/25)) || 
+            (prev >= 25 && crossBoundary(prev/100, strikeCounter/100))
+            ){
+            spawnManager.levelUp();
         }
     }
 
     /**
     decide whether they's hit enough enemies to improve your gun configuration
     */
-    private bool pointsCrossBoundary(float prevf, float nextf, float threshold)
-    {
-        int prev = (int)(prevf / threshold);
-        int next = (int)(nextf / threshold);
+    private bool crossBoundary(int prev, int next){
         return prev != next;
     }
 

@@ -19,9 +19,11 @@ public class SpawnManager : MonoBehaviour
     public GameObject[] badGuys;
     public GameObject[] explosions;
     public float goodToBadRatio=0.1f;
+    private int level = 1;
 
     void Start()
     {
+        level = 1;
         countdown = ticksTilSpawn;
         //spawnHero();
         InvokeRepeating("SpawnGameObject",startDelay, repeatRate);
@@ -57,14 +59,12 @@ public class SpawnManager : MonoBehaviour
             spawnMana();
             okSpawnMana = false;
         }
-        if((++ct % 25) == 0){
-            //Debug.Log("New Hero");
- //           spawnHero();
+        int bumpTime = (level < 10) ? level : 10;
+        if((++ct % (bumpTime * 25)) == 0){
             if(ticksTilSpawn > 1){
-                ticksTilSpawn--;
+                ticksTilSpawn--; // spawn a little faster sugar
             }
         }
-
     }
     void spawnBadGuy(){
             //Debug.Log("New Bad guy");
@@ -104,4 +104,9 @@ public class SpawnManager : MonoBehaviour
     public GameObject getExplosion(){
         return  explosions[0];
     } 
+
+    public void levelUp(){        
+        makeMana();
+        level++;
+    }
 }

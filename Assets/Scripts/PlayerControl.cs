@@ -175,39 +175,39 @@ something just hit me - how will that affect
         switch (m.unitType)
         {
             case MoveForward.UnitType.EasyUfo:
-                Debug.Log("Hit Ufo1");
+                //Debug.Log("Hit Ufo1");
                 takeHit(m.punch());
                 spawnExplosion(m.gameObject);
                 Destroy(m.gameObject);
                 break;
             case MoveForward.UnitType.MediumUfo:
-                Debug.Log("Hit Ufo2");
+                //Debug.Log("Hit Ufo2");
                 takeHit(m.punch());
                 spawnExplosion(m.gameObject);
                 Destroy(m.gameObject);
                 break;
             case MoveForward.UnitType.HardUfo:
-                Debug.Log("Hit Ufo3");
+                //Debug.Log("Hit Ufo3");
                 takeHit(m.punch());
                 spawnExplosion(m.gameObject);
                 Destroy(m.gameObject);
                 break;
             case MoveForward.UnitType.PowerupGun:
-                Debug.Log("Hit Powerup1");
+                //Debug.Log("Hit Powerup1");
                 Destroy(m.gameObject);
                 power++;
                 break;
             case MoveForward.UnitType.PowerupLife:
-                Debug.Log("Hit Powerup 2");
+                //Debug.Log("Hit Powerup 2");
                 Destroy(m.gameObject);
                 power++;
                 break;
             case MoveForward.UnitType.LowPowerShot:
-                Debug.Log("Hit Pew1");
+                //Debug.Log("Hit Pew1");
                 Destroy(m.gameObject);
                 break;
             case MoveForward.UnitType.HighPowerShot:
-                Debug.Log("Hit Pew2");
+                //Debug.Log("Hit Pew2");
                 Destroy(m.gameObject);
                 break;
             default:
@@ -218,16 +218,12 @@ something just hit me - how will that affect
 
     void takeHit(float punch)
     {
-        Debug.Log("take hit hits left: "+hits+" punch: "+punch);
         hits -= punch;
         if (hits <= 0)
         {
             GameDirector.Instance.playBoomSound();
             OnHeroDied();
-        } else {
-                            Debug.Log("I am not dead yet");
-
-        }
+        } 
     }
 
     void OnHeroDied()
@@ -273,16 +269,4 @@ something just hit me - how will that affect
         UnityEngine.Object.Destroy(g, 1.5f);
     }
 
-    IEnumerator awaitSpawnHero(float respawnTime)
-    {
-        yield return new WaitForSeconds(respawnTime);
-        Debug.Log("The wait is over!");
-        spawnHero();
-    }
-
-    public void spawnHero()
-    {
-        Vector3 pos = new Vector3(0.06f, 1, -4.35f);
-        Instantiate(playerPrefab, pos, playerPrefab.transform.rotation);
-    }
 }
