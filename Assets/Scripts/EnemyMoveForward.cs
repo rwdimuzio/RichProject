@@ -3,10 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+// INHERITANCE
+// child
 public class EnemyMoveForward : MoveForward
 {
+// ABSTRACTION
+// other details like points and speed have been hidden 
 
+// POLYMORPHISM
     public override void fieryDeath(){
                 Debug.Log("Fiery Death For Me");
 

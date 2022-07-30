@@ -13,12 +13,12 @@ using System.Xml.Schema;
 using UnityEngine;
 
 //using MoveForward.UnitType;
-public class PlayerControl : PlayerBase
+public class PlayerControl : MonoBehaviour
 {
     public GameObject[] pews;
 
     public GameObject playerPrefab;
-
+    
     private float minX = -22.5f;
 
     private float maxX = 23f;
@@ -27,6 +27,7 @@ public class PlayerControl : PlayerBase
 
     private float maxZ = 11f;
     private int power = 1;
+    private float hits = 10.0f;
 
     Rigidbody playerRb;
 
@@ -162,6 +163,9 @@ return the cost of doing business.
         );
     }
 
+/*
+something just hit me - how will that affect
+*/
     private void OnTriggerEnter(Collider other)
     {
         MoveForward m = other.gameObject.GetComponent<MoveForward>();
@@ -171,23 +175,22 @@ return the cost of doing business.
         switch (m.unitType)
         {
             case MoveForward.UnitType.EasyUfo:
-
                 Debug.Log("Hit Ufo1");
+                takeHit(m.punch());
                 spawnExplosion(m.gameObject);
                 Destroy(m.gameObject);
-                addHits(m.hits);
                 break;
             case MoveForward.UnitType.MediumUfo:
                 Debug.Log("Hit Ufo2");
+                takeHit(m.punch());
                 spawnExplosion(m.gameObject);
                 Destroy(m.gameObject);
-                addHits(m.hits);
                 break;
             case MoveForward.UnitType.HardUfo:
                 Debug.Log("Hit Ufo3");
+                takeHit(m.punch());
                 spawnExplosion(m.gameObject);
                 Destroy(m.gameObject);
-                addHits(m.hits);
                 break;
             case MoveForward.UnitType.PowerupGun:
                 Debug.Log("Hit Powerup1");
@@ -202,12 +205,10 @@ return the cost of doing business.
             case MoveForward.UnitType.LowPowerShot:
                 Debug.Log("Hit Pew1");
                 Destroy(m.gameObject);
-                addHits(m.hits);
                 break;
             case MoveForward.UnitType.HighPowerShot:
                 Debug.Log("Hit Pew2");
                 Destroy(m.gameObject);
-                addHits(m.hits);
                 break;
             default:
                 Debug.Log("Trigger Collide " + m.unitType.ToString());
@@ -215,36 +216,17 @@ return the cost of doing business.
         }
     }
 
-    private void OnCollisionEnter(Collision other)
+    void takeHit(float punch)
     {
-        MoveForward m = other.gameObject.GetComponent<MoveForward>();
-
-        Debug.Log("Collide " + m.unitType.ToString());
-
-        // if player collides with bomb, explode and set gameOver to true
-        if (other.gameObject.CompareTag("Pew"))
-        {
-            Debug.Log("Game Pew" + m.hits);
-
-            //            explosionParticle.Play();
-            //            playerAudio.PlayOneShot(explodeSound, 1.0f);
-            //            gameOver = true;
-            //            Debug.Log("Game Over!");
-            //            Destroy(other.gameObject);
-        }
-        // if(other.gameObject.CompareTag("Ufo")){
-        //     spawnExplosion(gameObject);
-        //     spawnExplosion(other.gameObject);
-
-        // }
-    }
-
-    void addHits(float num)
-    {
-        if (takeHit((int)num))
+        Debug.Log("take hit hits left: "+hits+" punch: "+punch);
+        hits -= punch;
+        if (hits <= 0)
         {
             GameDirector.Instance.playBoomSound();
             OnHeroDied();
+        } else {
+                            Debug.Log("I am not dead yet");
+
         }
     }
 

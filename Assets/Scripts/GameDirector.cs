@@ -1,23 +1,28 @@
-﻿using System.Reflection;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Security;
 using UnityEngine;
 
 public class GameDirector : MonoBehaviour
 {
     public GameObject gameOverObject;
+
     public GameObject scoreObject;
+
     public GameObject livesObject;
 
     public GameObject playerPrefab;
+
     public GameObject explosionObject;
 
     public AudioSource shootSound;
+
     public AudioSource boomSound;
+
     public AudioSource levelUpSound;
 
     private const int NUM_LIVES = 3;
@@ -40,16 +45,19 @@ public class GameDirector : MonoBehaviour
 
     public PlayState state = PlayState.WAITING_TO_START;
 
-    public int lives = NUM_LIVES; // how many respawns left
+    public int lives = NUM_LIVES; // how many re-spawns left
 
     public int fuel = FUEL; // how many shots are left
 
     public int strength = STRENGTH; // how many hits we can survive
 
+    private int strikeCounter = 0; // how many times we connected with a hit
+
     // Because of using RuntimeInitializeOnLoadMethod attribute to find/create and
     // initialize the instance, this property is accessible and
     // usable even in Awake() methods.
     private SpawnManager spawnManager;
+
     public static GameDirector Instance { get; private set; }
 
     // Thanks to the attribute, this method is executed before any other MonoBehaviour
@@ -77,11 +85,10 @@ public class GameDirector : MonoBehaviour
         Debug.Log("GameDirector.Awake()", this);
         scoreKeeper = scoreObject.GetComponent<ScoreKeeper>();
         livesKeeper = livesObject.GetComponent<LivesKeeper>();
-        scoreKeeper.setScore(score);
-        livesKeeper.setLives(lives);
+        scoreKeeper.setScore (score);
+        livesKeeper.setLives (lives);
         spawnManager = gameObject.GetComponent<SpawnManager>(); // sibling
     }
-
 
     public void StartGame()
     {
@@ -90,15 +97,17 @@ public class GameDirector : MonoBehaviour
         lives = NUM_LIVES; // how many respawns left
         fuel = FUEL; // how many shots are left
         strength = STRENGTH; // how many hits we can survive
-        score =0;
+        score = 0;
 
-        scoreKeeper.setScore(score);
-        livesKeeper.setLives(lives);
+        scoreKeeper.setScore (score);
+        livesKeeper.setLives (lives);
         gameOverObject.active = false;
         spawnManager.startSpawning();
         doSpawnHero(0.0f);
     }
-    public void EndGame(){
+
+    public void EndGame()
+    {
         gameOverObject.active = true;
         spawnManager.stopSpawning();
     }
@@ -122,7 +131,9 @@ public class GameDirector : MonoBehaviour
         }
         return strength > 0;
     }
-    public GameObject getExplosion(){
+
+    public GameObject getExplosion()
+    {
         return explosionObject;
     }
 
@@ -133,7 +144,7 @@ public class GameDirector : MonoBehaviour
 
     public IEnumerator spawnHero(float respawnTime, GameObject playerPrefab)
     {
-        addPointCounter = 0;
+        strikeCounter = 0;
         Debug.Log("The wait begins waiting " + respawnTime);
         yield return new WaitForSeconds(respawnTime);
         Debug.Log("The wait is over!");
@@ -163,47 +174,60 @@ public class GameDirector : MonoBehaviour
         levelUpSound.Play();
     }
 
-
-int addPointCounter = 0;
     public void addPoints(int amt)
     {
-        addToPointCounter();
+        bumpStrikeCounter();
         int prevScore = score;
         score += amt;
         Debug.Log("addPoints score:  " + score);
         scoreKeeper.setScore (score);
-        if(prevScore < 10000 && score >= 10000  || pointsCrossBoundary(prevScore, score, 100000) ){
+        if (
+            prevScore < 10000 && score >= 10000 ||
+            pointsCrossBoundary(prevScore, score, 100000)
+        )
+        {
             addLives(1);
             playLevelUpSound();
         }
     }
 
-    private void addToPointCounter(){
-        int prev = addPointCounter;
-        addPointCounter++;
-        bool crossed = pointsCrossBoundary(prev,addPointCounter, 100);
+/**
+control how often they get power ups
 
-        if(prev < 25 && addPointCounter >= 25 || crossed){
+*/
+    private void bumpStrikeCounter()
+    {
+        int prev = strikeCounter;
+        strikeCounter++;
+        bool higherThreshold = pointsCrossBoundary(prev, strikeCounter, 125);
+        bool beginnerThreshold  =  pointsCrossBoundary(prev, strikeCounter, 25);
+        if ( beginnerThreshold || higherThreshold)
+        {
             spawnManager.makeMana();
+            if(strikeCounter > 125){
+                strikeCounter -=100; 
+            }
         }
-        
     }
 
-    private bool pointsCrossBoundary(float prevf, float nextf, float threshold){
-        int prev = (int)(prevf/threshold);
-        int next = (int)(nextf/threshold);
+    /**
+    decide whether they's hit enough enemies to improve your gun configuration
+    */
+    private bool pointsCrossBoundary(float prevf, float nextf, float threshold)
+    {
+        int prev = (int)(prevf / threshold);
+        int next = (int)(nextf / threshold);
         return prev != next;
     }
 
-    public bool  addLives(int amt)
+    public bool addLives(int amt)
     {
         lives += amt;
-        if(lives < 0) lives = 0;
-        if(lives > 99) lives = 99;
+        if (lives < 0) lives = 0;
+        if (lives > 99) lives = 99;
         Debug.Log("addLives lives:  " + lives);
         livesKeeper.setLives (lives);
 
         return lives > 0;
     }
-
 }

@@ -926,7 +926,7 @@ MonoBehaviour:
   boomSound: {fileID: 1796105380}
   levelUpSound: {fileID: 1129969600}
   state: 0
-  lives: 10
+  lives: 3
   fuel: 100
   strength: 100
 --- !u!1 &1019375584

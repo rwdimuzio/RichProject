@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3532561757818609090}
   - component: {fileID: 3532561757818609091}
   - component: {fileID: 3532561757818609103}
-  - component: {fileID: 3532561757818609102}
   - component: {fileID: 114784186432005132}
   m_Layer: 0
   m_Name: Ufo2
@@ -112,22 +111,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 36
   m_CollisionDetection: 0
---- !u!114 &3532561757818609102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3532561757818609088}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2744f0f95c66174b9752087209227a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitType: 1
-  points: 3000
-  hits: 5
-  speed: 7
 --- !u!114 &114784186432005132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,7 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitType: 1
   points: 3000
-  hits: 5
+  strength: 3
   speed: 7
 --- !u!65 &2625608268730991600
 BoxCollider:
