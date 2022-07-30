@@ -47,8 +47,13 @@ public class MoveForward : MonoBehaviour
         transform.Translate(Vector3.forward * Time.deltaTime * speed);
         if (transform.position.z < lowerZ || transform.position.z > upperZ)
         {
+            ObjectExitsArena();
             Destroy (gameObject);
         }
+    }
+
+    public virtual void ObjectExitsArena(){
+
     }
 
     // POLYMORPHISM

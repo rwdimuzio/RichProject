@@ -60,7 +60,7 @@ public class SpawnManager : MonoBehaviour
             okSpawnMana = false;
         }
         int bumpTime = (level < 10) ? level : 10;
-        if((++ct % (bumpTime * 25)) == 0){
+        if((++ct % ( 25)) == 0){
             if(ticksTilSpawn > 1){
                 ticksTilSpawn--; // spawn a little faster sugar
             }
@@ -79,8 +79,7 @@ public class SpawnManager : MonoBehaviour
                 pos,
                 badGuys[animalIdx].transform.rotation
             );
-
-
+            GameDirector.Instance.enemySpaceBar(1);
     }
     public void makeMana(){
         okSpawnMana = true;
@@ -105,8 +104,8 @@ public class SpawnManager : MonoBehaviour
         return  explosions[0];
     } 
 
-    public void levelUp(){        
+    public void levelUp(int nextLevel){        
         makeMana();
-        level++;
+        this.level = nextLevel;
     }
 }

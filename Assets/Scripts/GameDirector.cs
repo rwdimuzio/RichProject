@@ -41,8 +41,6 @@ public class GameDirector : MonoBehaviour
 
     private int score = 0;
 
-    private LivesKeeper livesKeeper;
-
     public PlayState state = PlayState.WAITING_TO_START;
 
     public int lives = NUM_LIVES; // how many re-spawns left
@@ -52,7 +50,11 @@ public class GameDirector : MonoBehaviour
     public int strength = STRENGTH; // how many hits we can survive
 
     private int strikeCounter = 0; // how many times we connected with a hit
+    private int level = 1;
 
+    private int spaceBar = 0;
+    private int enemyBar = 0;
+    private int enemySlipped = 0;
     // Because of using RuntimeInitializeOnLoadMethod attribute to find/create and
     // initialize the instance, this property is accessible and
     // usable even in Awake() methods.
@@ -84,9 +86,8 @@ public class GameDirector : MonoBehaviour
         // Initialize non-MonoBehaviour logic, etc.
         Debug.Log("GameDirector.Awake()", this);
         scoreKeeper = scoreObject.GetComponent<ScoreKeeper>();
-        livesKeeper = livesObject.GetComponent<LivesKeeper>();
         scoreKeeper.setScore (score);
-        livesKeeper.setLives (lives);
+        scoreKeeper.setLives (lives);
         spawnManager = gameObject.GetComponent<SpawnManager>(); // sibling
     }
 
@@ -98,9 +99,15 @@ public class GameDirector : MonoBehaviour
         fuel = FUEL; // how many shots are left
         strength = STRENGTH; // how many hits we can survive
         score = 0;
+        level = 1;
+        spaceBar = 0;
+        enemyBar = 0;
+        enemySlipped = 0;
 
         scoreKeeper.setScore (score);
-        livesKeeper.setLives (lives);
+        scoreKeeper.setLives (lives);
+        scoreKeeper.setShield(strength);
+        scoreKeeper.setLevel(level);
         gameOverObject.active = false;
         spawnManager.startSpawning();
         doSpawnHero(0.0f);
@@ -122,6 +129,10 @@ public class GameDirector : MonoBehaviour
         return fuel > 0;
     }
 
+    public void setShield(float shield){
+        scoreKeeper.setShield((int) shield);
+    }
+
     public bool takeHit(int unitsPerHit)
     {
         strength -= unitsPerHit;
@@ -129,6 +140,8 @@ public class GameDirector : MonoBehaviour
         {
             strength = 0;
         }
+        scoreKeeper.setShield(strength);
+
         return strength > 0;
     }
 
@@ -147,6 +160,8 @@ public class GameDirector : MonoBehaviour
         strikeCounter = 0;
         Debug.Log("The wait begins waiting " + respawnTime);
         yield return new WaitForSeconds(respawnTime);
+        strength = STRENGTH;
+        scoreKeeper.setShield(strength);
         Debug.Log("The wait is over!");
         Vector3 pos = new Vector3(0.06f, 1, -4.35f);
         Instantiate(playerPrefab, pos, playerPrefab.transform.rotation);
@@ -182,12 +197,15 @@ public class GameDirector : MonoBehaviour
         Debug.Log("addPoints score:  " + score);
         scoreKeeper.setScore (score);
         if ( 
-            (prev < 10000 && crossBoundary(prev/10000, score/10000)) || // first 10,000 points first free li
-            (prev >=10000 && crossBoundary(prev/50000, score/50000))  // and at every 50,0000 after that 
+            (prev < 100000 && crossBoundary(prev/100000, score/100000)) || // first 100,000 points first free 
+            (prev >=100000 && crossBoundary(prev/1000000, score/1000000))  // and at every 10,000,000 after that 
         )
         {
+            int prevL = lives;
             addLives(1);
-            playLevelUpSound();
+            if(prevL != lives){
+                playLevelUpSound();
+            }
         }
     }
 
@@ -198,11 +216,14 @@ control how often they get power ups
     {
         int prev = strikeCounter;
         strikeCounter++;
-        if ( 
+        if ( // prev < 1000 || // lots of levels ups
             (prev < 25 && crossBoundary(prev/25, strikeCounter/25)) || 
             (prev >= 25 && crossBoundary(prev/100, strikeCounter/100))
             ){
-            spawnManager.levelUp();
+            level++;
+            scoreKeeper.setLevel(level);
+            spawnManager.levelUp(level);
+
         }
     }
 
@@ -217,10 +238,31 @@ control how often they get power ups
     {
         lives += amt;
         if (lives < 0) lives = 0;
-        if (lives > 99) lives = 99;
+        if (lives > 10) lives = 10;
         Debug.Log("addLives lives:  " + lives);
-        livesKeeper.setLives (lives);
+        scoreKeeper.setLives (lives);
 
         return lives > 0;
+    }
+
+    public void pressSpaceBar(int spaces){
+//        spaceBar += spaces;
+//        updateHitRatio();
+    }
+
+    public void enemySpaceBar(int spaces){
+        enemyBar += spaces;
+        updateHitRatio();
+    }
+
+    public void enemySlippedBy(int enemies){
+        enemySlipped += enemies;
+        updateHitRatio();
+//        enemyBar += enemies;
+//        updateHitRatio();
+    }
+    public void updateHitRatio(){
+        float ratio = (enemyBar == 0 ) ? 0 : enemySlipped *100/enemyBar;
+        scoreKeeper.setHitRatio(ratio);
     }
 }

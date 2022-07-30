@@ -15,6 +15,7 @@ using UnityEngine;
 //using MoveForward.UnitType;
 public class PlayerControl : MonoBehaviour
 {
+    const int MAX_POWER_UP = 8; 
     public GameObject[] pews;
 
     public GameObject playerPrefab;
@@ -27,7 +28,7 @@ public class PlayerControl : MonoBehaviour
 
     private float maxZ = 11f;
     private int power = 1;
-    private float hits = 10.0f;
+    private float hits = 4.0f;
 
     Rigidbody playerRb;
 
@@ -38,6 +39,7 @@ public class PlayerControl : MonoBehaviour
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
+        GameDirector.Instance.setShield(hits);        
     }
 
     // Update is called once per frame
@@ -83,9 +85,9 @@ public class PlayerControl : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             GameDirector.Instance.playShootSound();
-
             int cost = fire();
             GameDirector.Instance.addFuel(-1 * cost);
+            GameDirector.Instance.pressSpaceBar(1);
         }
     }
 
@@ -195,7 +197,11 @@ something just hit me - how will that affect
             case MoveForward.UnitType.PowerupGun:
                 //Debug.Log("Hit Powerup1");
                 Destroy(m.gameObject);
-                power++;
+                if(power < MAX_POWER_UP){
+                    power++;
+                } else {
+                    GameDirector.Instance.addPoints(100000);     
+                }
                 break;
             case MoveForward.UnitType.PowerupLife:
                 //Debug.Log("Hit Powerup 2");
@@ -214,6 +220,7 @@ something just hit me - how will that affect
                 Debug.Log("Trigger Collide " + m.unitType.ToString());
                 break;
         }
+        GameDirector.Instance.setShield(hits);        
     }
 
     void takeHit(float punch)

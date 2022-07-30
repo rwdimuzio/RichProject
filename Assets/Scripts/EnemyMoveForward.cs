@@ -10,6 +10,9 @@ public class EnemyMoveForward : MoveForward
 // ABSTRACTION
 // other details like points and speed have been hidden 
 
+    public override void ObjectExitsArena(){
+        GameDirector.Instance.enemySlippedBy(100);
+    }
 // POLYMORPHISM
     public override void fieryDeath(){
                 Debug.Log("Fiery Death For Me");
