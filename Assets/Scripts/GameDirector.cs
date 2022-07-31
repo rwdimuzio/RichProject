@@ -53,6 +53,7 @@ public class GameDirector : MonoBehaviour
     private int level = 1;
 
     private int spaceBar = 0;
+    private int kills = 0;
     private int enemyBar = 0;
     private int enemySlipped = 0;
     // Because of using RuntimeInitializeOnLoadMethod attribute to find/create and
@@ -101,6 +102,7 @@ public class GameDirector : MonoBehaviour
         score = 0;
         level = 1;
         spaceBar = 0;
+        kills = 0;
         enemyBar = 0;
         enemySlipped = 0;
 
@@ -250,6 +252,10 @@ control how often they get power ups
 //        updateHitRatio();
     }
 
+    public void addKill(int kills){
+        this.kills += kills;
+        updateHitRatio();
+    }
     public void enemySpaceBar(int spaces){
         enemyBar += spaces;
         updateHitRatio();
@@ -262,7 +268,7 @@ control how often they get power ups
 //        updateHitRatio();
     }
     public void updateHitRatio(){
-        float ratio = (enemyBar == 0 ) ? 0 : enemySlipped *100/enemyBar;
+        float ratio = (enemySlipped == 0 ) ? 0 : kills *100/enemySlipped;
         scoreKeeper.setHitRatio(ratio);
     }
 }

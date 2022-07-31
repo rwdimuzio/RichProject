@@ -18,6 +18,7 @@ public class GunshotMoveForward : MoveForward
             // ENCAPSULATION
             if (enemy.takeHit(punch() ) )
             {
+                GameDirector.Instance.addKill (1);
                 enemy.fieryDeath();
             }
         }

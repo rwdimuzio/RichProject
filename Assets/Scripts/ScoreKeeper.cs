@@ -38,6 +38,6 @@ public class ScoreKeeper : MonoBehaviour
         shieldText.text = "Shield: "+ shield;
     }
     public void setHitRatio(float ratio){
-        hitRatioText.text = ""; //"Hit Ratio: "+ ratio;
+        hitRatioText.text = "Hit Ratio: "+ ratio;
     }
 }
